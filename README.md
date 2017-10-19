@@ -1,3 +1,8 @@
+# react-redux-minesweeper
+Minesweeper built using react and redux
+
+You can see a live version of minesweeper [here](https://justin-muller.github.io/react-redux-minesweeper).
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
