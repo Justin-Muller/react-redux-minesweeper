@@ -1,0 +1,71 @@
+
+/* Tile */
+
+@keyframes placeFlag {
+    0% {
+        transform: scale(8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.kbd-navigation .tile:focus {
+    background: #ddd;
+}
+
+.tile {
+    background: transparent;
+    border: 1px solid #999;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: -1px;
+    margin-right: -1px;
+    padding: 0;
+    text-align: center;
+    z-index: 1;
+}
+
+.tile:focus {
+    outline: none;
+}
+
+/** Allow for theming options **/
+
+.tile.tile-disabled {
+    opacity: 0.2;
+}
+
+.tile.tile-disabled.tile-flag,
+.tile.tile-disabled.tile-incorrect,
+.tile.tile-disabled.tile-mine {
+    opacity: 1;
+}
+
+.tile.tile-flag {
+    animation: placeFlag 300ms forwards;
+}
+
+.tile.tile-flag.tile-revealed {
+    color: #3CB371;
+}
+
+.tile.tile-incorrect {
+    background-color: #fff;
+    color: #CD5C5C;
+}
+
+.tile.tile-revealed {
+    background-color: #fff;
+    color: #000;
+}
+
+.tile.tile-mine {
+    color: #FF0000;
+}

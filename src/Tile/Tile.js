@@ -1,4 +1,5 @@
 import React from 'react';
+import './Tile.css';
 
 /* Tile helpers */
 
@@ -92,7 +93,11 @@ function getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value,
 export default function Tile({disabled, flagged, incorrect, marked, mine, onMouseDown, onMouseUp, onRightClick, tileSize, value, visible}) {
     const classNames = getTileClassNames({disabled, flagged, incorrect, marked, mine, value, visible});
     const displayValue = getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value, visible});
-    const style = { width: tileSize + 'px', height: tileSize + 'px' };
+    const style = {
+        height: tileSize + 'px',
+        'line-height': tileSize + 'px',
+        width: tileSize + 'px'
+    };
     const attributes = getTileAttributes({classNames, onMouseDown, onMouseUp, onRightClick, style});
 
     return (

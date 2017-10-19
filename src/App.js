@@ -5,6 +5,7 @@ import Game from './Game/Game';
 
 /**
  * Update these values manually to change the game's difficulty.
+ * Will add a game menu to update these values in the future.
  *
  * @param {object}  defaults - The game's defaults to initialize the board with.
  * @param {number} [defaults.mineLength=20] - How many mines to generate on the board.

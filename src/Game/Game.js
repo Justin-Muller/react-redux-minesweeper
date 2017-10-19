@@ -1,3 +1,4 @@
+import './Game.css';
 import React, { Component } from 'react';
 import Tile from '../Tile/Tile';
 import GameOverConfirm from '../GameOverConfirm/GameOverConfirm';

@@ -1,0 +1,31 @@
+/* Board */
+
+.board {
+    margin: 44px 0;
+
+
+    /* pseudo elements used here because margin/padding does not scroll properly on board element. */
+
+    /*
+    &:before {
+        content: '';
+        display: block;
+        height: $boardPadding;
+    }
+
+    &:after {
+        content: '';
+        display: block;
+        height: $boardPadding;
+    }
+    */
+}
+
+/* Row */
+
+.row {
+    background-color: #000;
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0 44px;
+}
