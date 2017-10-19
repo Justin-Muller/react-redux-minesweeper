@@ -15,7 +15,7 @@ export default function GameOverConfirm(props) {
         const message = `${messagePrefix}\n\nWould you like to play again?`
 
         //Slight delay to allow board to update before popping up confirm message.
-        setTimeout(function () {
+        setTimeout(() => {
             if (window.confirm(message)) {
                 props.onConfirm();
             }

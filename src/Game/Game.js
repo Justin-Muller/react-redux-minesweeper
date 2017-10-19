@@ -394,17 +394,14 @@ function revealFlags({flaggedList, mineList, visibleList}) {
 /**
  * @component Game
  * @param {Object} props
- * @param {Number} [props.columnLength=8] - How many tiles along the X axis the playing area is.
- * @param {Number} [props.mineLength=20] - How many mines to generate within the playing area.
- * @param {Number} [props.rowLength=13] - How many tiles along the Y axis the playing area is.
- * @param {Number} [props.tileSize=44] - How big the are tiles in pixels.
+ * @param {Number} [props.columnLength] - How many tiles along the X axis the playing area is.
+ * @param {Number} [props.mineLength] - How many mines to generate within the playing area.
+ * @param {Number} [props.rowLength] - How many tiles along the Y axis the playing area is.
+ * @param {Number} [props.tileSize] - How big the are tiles in pixels.
  * @returns {DOMElement}
  */
 export default class Game extends Component {
-    constructor({columnLength=8, mineLength=20, rowLength=13, tileSize=44}) {
-        console.log('columnLength:', columnLength);
-
-        const props = {columnLength, mineLength, rowLength, tileSize};
+    constructor(props) {
         super(props);
         this.state = getInitState(props);
     }
@@ -612,30 +609,7 @@ export default class Game extends Component {
         let rows = [];
 
         for (let rowIndex = 0; rowIndex < this.props.rowLength; rowIndex++) {
-            let tiles = [];
-
-            for (let columnIndex = 0; columnIndex < this.props.columnLength; columnIndex++) {
-                let cellIndex = columnIndex + (rowIndex * this.props.columnLength);
-                let tile = (
-                    <Tile
-                        disabled={this.state.gameOver}
-                        flagged={this.state.flaggedList[cellIndex]}
-                        incorrect={this.state.incorrectList[cellIndex]}
-                        marked={this.state.markedList[cellIndex]}
-                        mine={this.state.mineList[cellIndex]}
-                        onMouseDown={(event) => this.handleTileMouseDown(event, cellIndex)}
-                        onMouseUp={(event) => this.handleTileMouseUp(event, cellIndex)}
-                        onRightClick={() => this.handleTileAltClick(cellIndex)}
-                        tileSize={this.props.tileSize}
-                        value={this.state.valueList[cellIndex]}
-                        visible={this.state.visibleList[cellIndex]}
-                    />);
-
-                tiles.push(tile);
-            }
-
-            let row = <div className="row">{tiles}</div>;
-            rows.push(row);
+            rows.push(this.renderRow(rowIndex));
         }
 
         return (
@@ -648,6 +622,35 @@ export default class Game extends Component {
                                  onConfirm={() => this.handleGameOverConfirm()} />
             </div>
         );
+    }
+
+    renderCell(cellIndex) {
+        return (
+            <Tile
+                disabled={this.state.gameOver}
+                flagged={this.state.flaggedList[cellIndex]}
+                incorrect={this.state.incorrectList[cellIndex]}
+                key={cellIndex}
+                marked={this.state.markedList[cellIndex]}
+                mine={this.state.mineList[cellIndex]}
+                onMouseDown={(event) => this.handleTileMouseDown(event, cellIndex)}
+                onMouseUp={(event) => this.handleTileMouseUp(event, cellIndex)}
+                onRightClick={() => this.handleTileAltClick(cellIndex)}
+                tileSize={this.props.tileSize}
+                value={this.state.valueList[cellIndex]}
+                visible={this.state.visibleList[cellIndex]}
+            />);
+    }
+
+    renderRow(rowIndex) {
+        let tiles = [];
+
+        for (let columnIndex = 0; columnIndex < this.props.columnLength; columnIndex++) {
+            let cellIndex = columnIndex + (rowIndex * this.props.columnLength);
+            tiles.push(this.renderCell(cellIndex));
+        }
+
+        return (<div className="row" key={rowIndex}>{tiles}</div>);
     }
 
     /**

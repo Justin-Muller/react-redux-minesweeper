@@ -95,7 +95,7 @@ export default function Tile({disabled, flagged, incorrect, marked, mine, onMous
     const displayValue = getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value, visible});
     const style = {
         height: tileSize + 'px',
-        'line-height': tileSize + 'px',
+        lineHeight: tileSize + 'px',
         width: tileSize + 'px'
     };
     const attributes = getTileAttributes({classNames, onMouseDown, onMouseUp, onRightClick, style});

@@ -11,7 +11,7 @@ registerServiceWorker();
 //fill is not supported by ie :(
 if (!Array.prototype.fill) {
     Array.prototype.fill = function (value) {
-        return Array.prototype.map.call(this, function () {
+        return Array.prototype.map.call(this, () => {
             return value;
         });
     };
@@ -47,6 +47,6 @@ window.addEventListener('click', function(e) {
 });
 
 //disable default right click menu to allow flagging with right click.
-window.oncontextmenu = function () {
+window.oncontextmenu = () => {
     return false;
 };
