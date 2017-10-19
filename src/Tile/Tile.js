@@ -90,15 +90,16 @@ function getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value,
  * @param {Boolean}  props.visible - Visible flag to show/hide the value or mine in the tile.
  * @returns {DOMElement}
  */
-export default function Tile({disabled, flagged, incorrect, marked, mine, onMouseDown, onMouseUp, onRightClick, tileSize, value, visible}) {
-    const classNames = getTileClassNames({disabled, flagged, incorrect, marked, mine, value, visible});
-    const displayValue = getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value, visible});
+export default function Tile(props) {
+    const classNames = getTileClassNames(props);
+    const displayValue = getTileDisplayValue(props);
+    const {tileSize} = props;
     const style = {
         height: tileSize + 'px',
         lineHeight: tileSize + 'px',
         width: tileSize + 'px'
     };
-    const attributes = getTileAttributes({classNames, onMouseDown, onMouseUp, onRightClick, style});
+    const attributes = getTileAttributes({...props, classNames, style});
 
     return (
         <button {...attributes}>{displayValue}</button>

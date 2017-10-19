@@ -5,11 +5,10 @@
  * @param {Number} props.boardSize - The total board area (columns * rows).
  * @param {Number} props.columnLength - How many tiles along the X axis the playing area is.
  * @param {Array}  props.minePosition - The mine to increment values around.
- * @param {Number} props.rowLength - How many tiles along the Y axis the playing area is.
  * @param {Array}  props.valueList - The numeric values for each tile on the board.
  * @returns {Array}
  */
-function incrementValuesAroundMine({boardSize, columnLength, minePosition, rowLength, valueList}) {
+function incrementValuesAroundMine({boardSize, columnLength, minePosition, valueList}) {
     const newValueList = valueList.slice(0);  //make a copy of the array.
     const wallToTop = minePosition < columnLength;
     const wallToLeft = minePosition % columnLength === 0;

@@ -4,16 +4,18 @@
  * Reveals an empty tile and all adjacent empty tiles until it reaches the edge of values.
  * Note: Mutating passed in array to save on performance. This function is recursive.
  * @function revealEmptyArea
- * @param {Number} boardSize
- * @param {Number} columnLength
- * @param {Number} tileIndex
- * @param {Array} flaggedList
- * @param {Array} markedList
- * @param {Array} valueList
- * @param {Array} visibleList
+ * @param {Number} props.boardSize
+ * @param {Number} props.columnLength
+ * @param {Number} props.tileIndex
+ * @param {Array}  props.flaggedList
+ * @param {Array}  props.markedList
+ * @param {Array}  props.valueList
+ * @param {Array}  props.visibleList
  * @returns {Array}
  */
-function revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList}) {
+function revealEmptyArea(props) {
+    const {boardSize, columnLength, flaggedList, markedList, tileIndex, valueList} = props;
+    let {visibleList} = props;
     visibleList[tileIndex] = true;
 
     if (valueList[tileIndex]) {
@@ -40,46 +42,46 @@ function revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, marke
     if (!wallToTop) {
         //top left
         if (!wallToLeft && !visibleList[topLeftTile] && !flaggedList[topLeftTile] && !markedList[topLeftTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topLeftTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({...props, tileIndex: topLeftTile});
         }
 
         //top
         if (!visibleList[topTile] && !flaggedList[topTile] && !markedList[topTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({...props, tileIndex: topTile});
         }
 
 
         //top right
         if (!wallToRight && !visibleList[topRightTile] && !flaggedList[topRightTile] && !markedList[topRightTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topRightTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({...props, tileIndex: topRightTile});
         }
     }
 
     //left
     if (!wallToLeft && !visibleList[leftTile] && !flaggedList[leftTile] && !markedList[leftTile]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: leftTile, flaggedList, markedList, valueList, visibleList});
+        visibleList = revealEmptyArea({...props, tileIndex: leftTile});
     }
 
     //right
     if (!wallToRight && !visibleList[rightTile] && !flaggedList[rightTile] && !markedList[rightTile]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: rightTile, flaggedList, markedList, valueList, visibleList});
+        visibleList = revealEmptyArea({...props, tileIndex: rightTile});
     }
 
     //bottom row
     if (!wallToBottom) {
         //bottom left
         if (!wallToLeft && !visibleList[bottomLeftTile] && !flaggedList[bottomLeftTile] && !markedList[bottomLeftTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomLeftTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({...props, tileIndex: bottomLeftTile});
         }
 
         //bottom
         if (!visibleList[bottomTile] && !flaggedList[bottomTile] && !markedList[bottomTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({...props, tileIndex: bottomTile});
         }
 
         //bottom right
         if (!wallToRight && !visibleList[bottomRightTile] && !flaggedList[bottomRightTile] && !markedList[bottomRightTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomRightTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({...props, tileIndex: bottomRightTile});
         }
     }
 
@@ -100,7 +102,7 @@ export const visibleListReducer = (state, action) => {
     let visibleList = state.visibleList.slice(0);
     visibleList[tileIndex] = true;
 
-    visibleList = revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList});
+    visibleList = revealEmptyArea({...state, boardSize, tileIndex, visibleList});
 
     return {...state, visibleList};
 };
