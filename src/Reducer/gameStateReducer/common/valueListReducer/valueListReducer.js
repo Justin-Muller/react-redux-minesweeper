@@ -1,5 +1,3 @@
-//TODO - Do we need to convert incrementValuesAroundMine to a reducer?
-
 /**
  * Returns a new values array by copying from the one passed in to correctly generate the values that are positioned around the board for each mine.
  * @function incrementValuesAroundMine
