@@ -1,84 +1,84 @@
 //TODO - Do we need to convert revealEmptyArea to a reducer?
 
 /**
- * Reveals an empty cell and all adjacent empty cells until it reaches the edge of values.
+ * Reveals an empty tile and all adjacent empty tiles until it reaches the edge of values.
  * Note: Mutating passed in array to save on performance. This function is recursive.
  * @function revealEmptyArea
  * @param {Number} boardSize
- * @param {Number} cellIndex
+ * @param {Number} tileIndex
  * @param {Array} flaggedList
  * @param {Array} markedList
  * @param {Array} valueList
  * @param {Array} visibleList
  * @returns {Array}
  */
-function revealEmptyArea({boardSize, cellIndex, columnLength, flaggedList, markedList, valueList, visibleList}) {
-    visibleList[cellIndex] = true;
+function revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList}) {
+    visibleList[tileIndex] = true;
 
-    if (valueList[cellIndex]) {
+    if (valueList[tileIndex]) {
         return visibleList;
     }
 
-    const wallToTop = cellIndex < columnLength;
-    const wallToLeft = cellIndex % columnLength === 0;
-    const wallToRight = cellIndex % columnLength === (columnLength - 1);
-    const wallToBottom = cellIndex >= boardSize - columnLength;
+    const wallToTop = tileIndex < columnLength;
+    const wallToLeft = tileIndex % columnLength === 0;
+    const wallToRight = tileIndex % columnLength === (columnLength - 1);
+    const wallToBottom = tileIndex >= boardSize - columnLength;
 
-    const topLeftCell = cellIndex - columnLength - 1;
-    const topCell = cellIndex - columnLength;
-    const topRightCell = cellIndex - columnLength + 1;
-    const leftCell = cellIndex - 1;
-    const rightCell = cellIndex + 1;
-    const bottomLeftCell = cellIndex + columnLength - 1;
-    const bottomCell = cellIndex + columnLength;
-    const bottomRightCell = cellIndex + columnLength + 1;
+    const topLeftTile = tileIndex - columnLength - 1;
+    const topTile = tileIndex - columnLength;
+    const topRightTile = tileIndex - columnLength + 1;
+    const leftTile = tileIndex - 1;
+    const rightTile = tileIndex + 1;
+    const bottomLeftTile = tileIndex + columnLength - 1;
+    const bottomTile = tileIndex + columnLength;
+    const bottomRightTile = tileIndex + columnLength + 1;
 
     //TODO - think of a simpler way to calculate this state. Perhaps bit-wise operations?
 
     //top row
     if (!wallToTop) {
         //top left
-        if (!wallToLeft && !visibleList[topLeftCell] && !flaggedList[topLeftCell] && !markedList[topLeftCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: topLeftCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToLeft && !visibleList[topLeftTile] && !flaggedList[topLeftTile] && !markedList[topLeftTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topLeftTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //top
-        if (!visibleList[topCell] && !flaggedList[topCell] && !markedList[topCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: topCell, flaggedList, markedList, valueList, visibleList});
+        if (!visibleList[topTile] && !flaggedList[topTile] && !markedList[topTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topTile, flaggedList, markedList, valueList, visibleList});
         }
 
 
         //top right
-        if (!wallToRight && !visibleList[topRightCell] && !flaggedList[topRightCell] && !markedList[topRightCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: topRightCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToRight && !visibleList[topRightTile] && !flaggedList[topRightTile] && !markedList[topRightTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topRightTile, flaggedList, markedList, valueList, visibleList});
         }
     }
 
     //left
-    if (!wallToLeft && !visibleList[leftCell] && !flaggedList[leftCell] && !markedList[leftCell]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: leftCell, flaggedList, markedList, valueList, visibleList});
+    if (!wallToLeft && !visibleList[leftTile] && !flaggedList[leftTile] && !markedList[leftTile]) {
+        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: leftTile, flaggedList, markedList, valueList, visibleList});
     }
 
     //right
-    if (!wallToRight && !visibleList[rightCell] && !flaggedList[rightCell] && !markedList[rightCell]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: rightCell, flaggedList, markedList, valueList, visibleList});
+    if (!wallToRight && !visibleList[rightTile] && !flaggedList[rightTile] && !markedList[rightTile]) {
+        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: rightTile, flaggedList, markedList, valueList, visibleList});
     }
 
     //bottom row
     if (!wallToBottom) {
         //bottom left
-        if (!wallToLeft && !visibleList[bottomLeftCell] && !flaggedList[bottomLeftCell] && !markedList[bottomLeftCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: bottomLeftCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToLeft && !visibleList[bottomLeftTile] && !flaggedList[bottomLeftTile] && !markedList[bottomLeftTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomLeftTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //bottom
-        if (!visibleList[bottomCell] && !flaggedList[bottomCell] && !markedList[bottomCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: bottomCell, flaggedList, markedList, valueList, visibleList});
+        if (!visibleList[bottomTile] && !flaggedList[bottomTile] && !markedList[bottomTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //bottom right
-        if (!wallToRight && !visibleList[bottomRightCell] && !flaggedList[bottomRightCell] && !markedList[bottomRightCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: bottomRightCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToRight && !visibleList[bottomRightTile] && !flaggedList[bottomRightTile] && !markedList[bottomRightTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomRightTile, flaggedList, markedList, valueList, visibleList});
         }
     }
 
@@ -99,9 +99,9 @@ export const visibleListReducer = (state, action) => {
     let visibleList = state.visibleList.slice(0);
     visibleList[tileIndex] = true;
 
-    //TODO - Make naming consistent with cellIndex vs. tileIndex.
+    //TODO - Make naming consistent with tileIndex vs. tileIndex.
     //TODO - Could potentially convert reveal empty area to a reducer.
-    visibleList = revealEmptyArea({boardSize, cellIndex: tileIndex, columnLength, flaggedList, markedList, valueList, visibleList});
+    visibleList = revealEmptyArea({boardSize, tileIndex: tileIndex, columnLength, flaggedList, markedList, valueList, visibleList});
 
     return {...state, visibleList};
 };

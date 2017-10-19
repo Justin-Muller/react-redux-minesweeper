@@ -42,11 +42,11 @@ function checkWinCondition({mineLength, visibleList}) {
 function getIncorrectList({boardSize, flaggedList, mineList}) {
     const incorrectList = (new Array(boardSize)).fill(false);
 
-    for (let cellIndex = 0; cellIndex < boardSize; cellIndex++) {
-        let flagged = flaggedList[cellIndex];
-        let mine = mineList[cellIndex];
+    for (let tileIndex = 0; tileIndex < boardSize; tileIndex++) {
+        let flagged = flaggedList[tileIndex];
+        let mine = mineList[tileIndex];
         if (flagged && !mine) {
-            incorrectList[cellIndex] = true;
+            incorrectList[tileIndex] = true;
         }
     }
 
@@ -96,15 +96,15 @@ function getInitState({columnLength, rowLength, tileSize}) {
  * @param {Array}  props.markedList
  * @param {Number} props.mineLength - How many mines to generate within the playing area.
  * @param {Number} props.rowLength - How many tiles along the Y axis the playing area is.
- * @param {Number} props.startCell - The first tile to be clicked on the board.
+ * @param {Number} props.startTile - The first tile to be clicked on the board.
  * @param {Array}  props.visibleList
  * @returns {Object}
  */
-function getStartState({columnLength, flaggedList, markedList, mineLength, rowLength, startCell, visibleList}) {
+function getStartState({columnLength, flaggedList, markedList, mineLength, rowLength, startTile, visibleList}) {
     const boardSize = columnLength * rowLength;
-    const mineList = getMineList({boardSize, startCell, mineLength});
+    const mineList = getMineList({boardSize, startTile, mineLength});
     const valueList = getValueList({boardSize, columnLength, mineList});
-    const newVisibleList = getVisibleList({boardSize, cellIndex: startCell, columnLength, flaggedList, markedList, valueList, visibleList});
+    const newVisibleList = getVisibleList({boardSize, tileIndex: startTile, columnLength, flaggedList, markedList, valueList, visibleList});
 
     return {
         initialised: true,
@@ -115,10 +115,10 @@ function getStartState({columnLength, flaggedList, markedList, mineLength, rowLe
 }
 
 /**
- * Calculates new visibility based on the cell index revealed and the value it contains.
+ * Calculates new visibility based on the tile index revealed and the value it contains.
  * @function getVisibleList
  * @param {Number} boardSize
- * @param {Number} cellIndex
+ * @param {Number} tileIndex
  * @param {Number} columnLength
  * @param {Array} flaggedList
  * @param {Array} markedList
@@ -126,11 +126,11 @@ function getStartState({columnLength, flaggedList, markedList, mineLength, rowLe
  * @param {Array} visibleList
  * @returns {Array}
  */
-function getVisibleList({boardSize, cellIndex, columnLength, flaggedList, markedList, valueList, visibleList}) {
+function getVisibleList({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList}) {
     let newVisibleList = visibleList.slice(0);
-    newVisibleList[cellIndex] = true;
+    newVisibleList[tileIndex] = true;
 
-    newVisibleList = revealEmptyArea({boardSize, cellIndex, columnLength, flaggedList, markedList, valueList, visibleList: newVisibleList});
+    newVisibleList = revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList: newVisibleList});
 
     return newVisibleList;
 }
@@ -207,11 +207,11 @@ function incrementValuesAroundMine({boardSize, columnLength, minePosition, rowLe
  * @param {Number}  props.boardSize - The total board area (columns * rows)
  * @param {Number}  props.columnLength - How many tiles along the X axis the playing area is.
  * @param {Number}  props.mineLength - How many mines to generate within the playing area.
- * @param {Number}  props.startCell - Optional variable which is used to be the first tile to be clicked on the board.
+ * @param {Number}  props.startTile - Optional variable which is used to be the first tile to be clicked on the board.
  * @param {Number}  props.rowLength - How many tiles along the Y axis the playing area is.
  * @returns {Array}
  */
-function getMineList({boardSize, columnLength, mineLength, startCell, rowLength}) {
+function getMineList({boardSize, columnLength, mineLength, startTile, rowLength}) {
     if (mineLength > (boardSize - 1)) {
         throw new Error('Cannot have more mines than tiles on the board.');
     }
@@ -220,7 +220,7 @@ function getMineList({boardSize, columnLength, mineLength, startCell, rowLength}
     let possibleMines = [];
 
     for (let i = 0; i < boardSize; i++) {
-        if (i === startCell) {
+        if (i === startTile) {
             continue;
         }
         possibleMines.push(i);
@@ -261,84 +261,84 @@ function getValueList({boardSize, columnLength, mineList, rowLength}) {
 }
 
 /**
- * Reveals an empty cell and all adjacent empty cells until it reaches the edge of values.
+ * Reveals an empty tile and all adjacent empty tiles until it reaches the edge of values.
  * Note: Mutating passed in array to save on performance. This function is recursive.
  * @function revealEmptyArea
  * @param {Number} boardSize
- * @param {Number} cellIndex
+ * @param {Number} tileIndex
  * @param {Array} flaggedList
  * @param {Array} markedList
  * @param {Array} valueList
  * @param {Array} visibleList
  * @returns {Array}
  */
-function revealEmptyArea({boardSize, cellIndex, columnLength, flaggedList, markedList, valueList, visibleList}) {
-    visibleList[cellIndex] = true;
+function revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList}) {
+    visibleList[tileIndex] = true;
 
-    if (valueList[cellIndex]) {
+    if (valueList[tileIndex]) {
         return visibleList;
     }
 
-    const wallToTop = cellIndex < columnLength;
-    const wallToLeft = cellIndex % columnLength === 0;
-    const wallToRight = cellIndex % columnLength === (columnLength - 1);
-    const wallToBottom = cellIndex >= boardSize - columnLength;
+    const wallToTop = tileIndex < columnLength;
+    const wallToLeft = tileIndex % columnLength === 0;
+    const wallToRight = tileIndex % columnLength === (columnLength - 1);
+    const wallToBottom = tileIndex >= boardSize - columnLength;
 
-    const topLeftCell = cellIndex - columnLength - 1;
-    const topCell = cellIndex - columnLength;
-    const topRightCell = cellIndex - columnLength + 1;
-    const leftCell = cellIndex - 1;
-    const rightCell = cellIndex + 1;
-    const bottomLeftCell = cellIndex + columnLength - 1;
-    const bottomCell = cellIndex + columnLength;
-    const bottomRightCell = cellIndex + columnLength + 1;
+    const topLeftTile = tileIndex - columnLength - 1;
+    const topTile = tileIndex - columnLength;
+    const topRightTile = tileIndex - columnLength + 1;
+    const leftTile = tileIndex - 1;
+    const rightTile = tileIndex + 1;
+    const bottomLeftTile = tileIndex + columnLength - 1;
+    const bottomTile = tileIndex + columnLength;
+    const bottomRightTile = tileIndex + columnLength + 1;
 
     //TODO - think of a simpler way to calculate this state. Perhaps bit-wise operations?
 
     //top row
     if (!wallToTop) {
         //top left
-        if (!wallToLeft && !visibleList[topLeftCell] && !flaggedList[topLeftCell] && !markedList[topLeftCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: topLeftCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToLeft && !visibleList[topLeftTile] && !flaggedList[topLeftTile] && !markedList[topLeftTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topLeftTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //top
-        if (!visibleList[topCell] && !flaggedList[topCell] && !markedList[topCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: topCell, flaggedList, markedList, valueList, visibleList});
+        if (!visibleList[topTile] && !flaggedList[topTile] && !markedList[topTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topTile, flaggedList, markedList, valueList, visibleList});
         }
 
 
         //top right
-        if (!wallToRight && !visibleList[topRightCell] && !flaggedList[topRightCell] && !markedList[topRightCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: topRightCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToRight && !visibleList[topRightTile] && !flaggedList[topRightTile] && !markedList[topRightTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topRightTile, flaggedList, markedList, valueList, visibleList});
         }
     }
 
     //left
-    if (!wallToLeft && !visibleList[leftCell] && !flaggedList[leftCell] && !markedList[leftCell]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: leftCell, flaggedList, markedList, valueList, visibleList});
+    if (!wallToLeft && !visibleList[leftTile] && !flaggedList[leftTile] && !markedList[leftTile]) {
+        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: leftTile, flaggedList, markedList, valueList, visibleList});
     }
 
     //right
-    if (!wallToRight && !visibleList[rightCell] && !flaggedList[rightCell] && !markedList[rightCell]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: rightCell, flaggedList, markedList, valueList, visibleList});
+    if (!wallToRight && !visibleList[rightTile] && !flaggedList[rightTile] && !markedList[rightTile]) {
+        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: rightTile, flaggedList, markedList, valueList, visibleList});
     }
 
     //bottom row
     if (!wallToBottom) {
         //bottom left
-        if (!wallToLeft && !visibleList[bottomLeftCell] && !flaggedList[bottomLeftCell] && !markedList[bottomLeftCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: bottomLeftCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToLeft && !visibleList[bottomLeftTile] && !flaggedList[bottomLeftTile] && !markedList[bottomLeftTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomLeftTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //bottom
-        if (!visibleList[bottomCell] && !flaggedList[bottomCell] && !markedList[bottomCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: bottomCell, flaggedList, markedList, valueList, visibleList});
+        if (!visibleList[bottomTile] && !flaggedList[bottomTile] && !markedList[bottomTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //bottom right
-        if (!wallToRight && !visibleList[bottomRightCell] && !flaggedList[bottomRightCell] && !markedList[bottomRightCell]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, cellIndex: bottomRightCell, flaggedList, markedList, valueList, visibleList});
+        if (!wallToRight && !visibleList[bottomRightTile] && !flaggedList[bottomRightTile] && !markedList[bottomRightTile]) {
+            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomRightTile, flaggedList, markedList, valueList, visibleList});
         }
     }
 
@@ -377,11 +377,11 @@ function revealFlags({flaggedList, mineList, visibleList}) {
     const newFlaggedList = flaggedList.slice(0),
         newVisibleList = visibleList.slice(0);
 
-    for (let cellIndex = 0; cellIndex < mineList.length; cellIndex++) {
-        let mine = mineList[cellIndex];
+    for (let tileIndex = 0; tileIndex < mineList.length; tileIndex++) {
+        let mine = mineList[tileIndex];
         if (mine) {
-            newFlaggedList[cellIndex] = true;
-            newVisibleList[cellIndex] = true;
+            newFlaggedList[tileIndex] = true;
+            newVisibleList[tileIndex] = true;
         }
     }
 
@@ -416,9 +416,9 @@ export default class Game extends Component {
     /**
      * @method handleTileMouseDown
      * @param {Object} event
-     * @param {Number} cellIndex
+     * @param {Number} tileIndex
      */
-    handleTileMouseDown(event, cellIndex) {
+    handleTileMouseDown(event, tileIndex) {
         //TODO: test windows
         //ignore right click
         if (event.nativeEvent && event.nativeEvent.which > 1) {
@@ -435,7 +435,7 @@ export default class Game extends Component {
                 //if held for longer, treated as a long click - letting go wont reveal tile.
                 let longClickTimerEnd = setTimeout(() => {
                     if (longClickTimerEnd) {
-                        this.handleTileAltClick(cellIndex);
+                        this.handleTileAltClick(tileIndex);
                     }
                 }, 200);
                 //TODO ^-- Make this time configurable in the settings menu later...
@@ -455,9 +455,9 @@ export default class Game extends Component {
     /**
      * @method handleTileMouseUp
      * @param {Object} event
-     * @param {Number} cellIndex
+     * @param {Number} tileIndex
      */
-    handleTileMouseUp(event, cellIndex) {
+    handleTileMouseUp(event, tileIndex) {
         if (this.state.gameOver) {
             return this.setState({
                 showGameOverMessage: true
@@ -477,7 +477,7 @@ export default class Game extends Component {
         if (this.state.longClickTimerEnd) {
             clearTimeout(this.state.longClickTimerEnd);
         } else {
-            this.handleTileClick(cellIndex);
+            this.handleTileClick(tileIndex);
         }
 
         this.setState({
@@ -488,15 +488,15 @@ export default class Game extends Component {
 
     /**
      * @method handleTileAltClick
-     * @param {Number} cellIndex
+     * @param {Number} tileIndex
      */
-    handleTileAltClick(cellIndex) {
+    handleTileAltClick(tileIndex) {
         const flaggedList = this.state.flaggedList.slice(0);
         const markedList = this.state.markedList.slice(0);
-        const visible = this.state.visibleList[cellIndex];
+        const visible = this.state.visibleList[tileIndex];
 
-        let flagged = flaggedList[cellIndex];
-        let marked = markedList[cellIndex];
+        let flagged = flaggedList[tileIndex];
+        let marked = markedList[tileIndex];
 
         if (this.state.gameOver || visible) {
             return;
@@ -505,8 +505,8 @@ export default class Game extends Component {
         flagged = !(flagged || marked);
         marked = false;
 
-        flaggedList[cellIndex] = flagged;
-        markedList[cellIndex] = marked;
+        flaggedList[tileIndex] = flagged;
+        markedList[tileIndex] = marked;
 
         this.setState({
             flaggedList,
@@ -516,15 +516,15 @@ export default class Game extends Component {
 
     /**
      * @method handleTileClick
-     * @param {Object} cellIndex
+     * @param {Object} tileIndex
      */
-    handleTileClick(cellIndex) {
+    handleTileClick(tileIndex) {
         if (!this.state.initialised) {
-            return this.startGame(cellIndex);
+            return this.startGame(tileIndex);
         }
 
         let visibleList = this.state.visibleList.slice(0);
-        let visible = visibleList[cellIndex];
+        let visible = visibleList[tileIndex];
 
         if (visible) {
             return;
@@ -539,11 +539,11 @@ export default class Game extends Component {
         const valueList = this.state.valueList.slice(0);
 
         let flaggedList = this.state.flaggedList.slice(0);
-        let flagged = flaggedList[cellIndex];
+        let flagged = flaggedList[tileIndex];
         let incorrectList = this.state.incorrectList.slice(0);
-        let marked = markedList[cellIndex];
-        let mine = mineList[cellIndex];
-        let value = valueList[cellIndex];
+        let marked = markedList[tileIndex];
+        let mine = mineList[tileIndex];
+        let value = valueList[tileIndex];
 
         let gameOver = false;
         let showGameOverMessage = false;
@@ -566,13 +566,13 @@ export default class Game extends Component {
                 visibleList = revealMines({mineList, visibleList});
                 incorrectList = getIncorrectList({boardSize, flaggedList, mineList});
             } else if (value === 0) {
-                visibleList = revealEmptyArea({boardSize, columnLength, cellIndex, columnLength, flaggedList, markedList, rowLength, valueList, visibleList});
+                visibleList = revealEmptyArea({boardSize, columnLength, tileIndex, columnLength, flaggedList, markedList, rowLength, valueList, visibleList});
             }
         }
 
-        flaggedList[cellIndex] = flagged;
-        markedList[cellIndex] = marked;
-        visibleList[cellIndex] = visible;
+        flaggedList[tileIndex] = flagged;
+        markedList[tileIndex] = marked;
+        visibleList[tileIndex] = visible;
 
         if (!gameOver && checkWinCondition({mineLength, visibleList})) {
             gameOver = true;
@@ -624,21 +624,21 @@ export default class Game extends Component {
         );
     }
 
-    renderCell(cellIndex) {
+    renderTile(tileIndex) {
         return (
             <Tile
                 disabled={this.state.gameOver}
-                flagged={this.state.flaggedList[cellIndex]}
-                incorrect={this.state.incorrectList[cellIndex]}
-                key={cellIndex}
-                marked={this.state.markedList[cellIndex]}
-                mine={this.state.mineList[cellIndex]}
-                onMouseDown={(event) => this.handleTileMouseDown(event, cellIndex)}
-                onMouseUp={(event) => this.handleTileMouseUp(event, cellIndex)}
-                onRightClick={() => this.handleTileAltClick(cellIndex)}
+                flagged={this.state.flaggedList[tileIndex]}
+                incorrect={this.state.incorrectList[tileIndex]}
+                key={tileIndex}
+                marked={this.state.markedList[tileIndex]}
+                mine={this.state.mineList[tileIndex]}
+                onMouseDown={(event) => this.handleTileMouseDown(event, tileIndex)}
+                onMouseUp={(event) => this.handleTileMouseUp(event, tileIndex)}
+                onRightClick={() => this.handleTileAltClick(tileIndex)}
                 tileSize={this.props.tileSize}
-                value={this.state.valueList[cellIndex]}
-                visible={this.state.visibleList[cellIndex]}
+                value={this.state.valueList[tileIndex]}
+                visible={this.state.visibleList[tileIndex]}
             />);
     }
 
@@ -646,8 +646,8 @@ export default class Game extends Component {
         let tiles = [];
 
         for (let columnIndex = 0; columnIndex < this.props.columnLength; columnIndex++) {
-            let cellIndex = columnIndex + (rowIndex * this.props.columnLength);
-            tiles.push(this.renderCell(cellIndex));
+            let tileIndex = columnIndex + (rowIndex * this.props.columnLength);
+            tiles.push(this.renderTile(tileIndex));
         }
 
         return (<div className="row" key={rowIndex}>{tiles}</div>);
@@ -662,12 +662,12 @@ export default class Game extends Component {
 
     /**
      * @method startGame
-     * @param {Number} startCell
+     * @param {Number} startTile
      */
-    startGame(startCell) {
+    startGame(startTile) {
         let {columnLength, mineLength, rowLength} = this.props;
         let {flaggedList, markedList, visibleList} = this.state;
-        let startState = getStartState({columnLength, flaggedList, markedList, mineLength, rowLength, startCell, visibleList});
+        let startState = getStartState({columnLength, flaggedList, markedList, mineLength, rowLength, startTile, visibleList});
         this.setState(startState);
     }
 };
