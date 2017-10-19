@@ -5,6 +5,7 @@
  * Note: Mutating passed in array to save on performance. This function is recursive.
  * @function revealEmptyArea
  * @param {Number} boardSize
+ * @param {Number} columnLength
  * @param {Number} tileIndex
  * @param {Array} flaggedList
  * @param {Array} markedList
@@ -99,9 +100,7 @@ export const visibleListReducer = (state, action) => {
     let visibleList = state.visibleList.slice(0);
     visibleList[tileIndex] = true;
 
-    //TODO - Make naming consistent with tileIndex vs. tileIndex.
-    //TODO - Could potentially convert reveal empty area to a reducer.
-    visibleList = revealEmptyArea({boardSize, tileIndex: tileIndex, columnLength, flaggedList, markedList, valueList, visibleList});
+    visibleList = revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList});
 
     return {...state, visibleList};
 };
