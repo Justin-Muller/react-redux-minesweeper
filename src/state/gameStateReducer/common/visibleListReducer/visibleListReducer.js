@@ -95,7 +95,7 @@ function revealEmptyArea(props) {
  * @returns {object}
  */
 export const visibleListReducer = (state, action) => {
-    const {columnLength, flaggedList, markedList, rowLength, valueList} = state;
+    const {columnLength, rowLength} = state;
     const {tileIndex} = action;
     const boardSize = columnLength * rowLength;
 

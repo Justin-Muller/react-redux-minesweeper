@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
 import './App.css';
-import Game from './Game/Game';
+import gameStateReducer from './state/gameStateReducer/gameStateReducer';
+import Game from './component/Game/Game';
 
 /**
  * Update these values manually to change the game's difficulty.
@@ -20,13 +23,17 @@ const defaults = {
     tileSize: 44
 };
 
+const store = createStore(gameStateReducer);
+
 class App extends Component {
   render() {
     return (
-        <Game columnLength={defaults.columnLength}
-              mineLength={defaults.mineLength}
-              rowLength={defaults.rowLength}
-              tileSize={defaults.tileSize} />
+        <Provider store={store}>
+            <Game columnLength={defaults.columnLength}
+                  mineLength={defaults.mineLength}
+                  rowLength={defaults.rowLength}
+                  tileSize={defaults.tileSize} />
+        </Provider>
     );
   }
 }

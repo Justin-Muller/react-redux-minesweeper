@@ -566,7 +566,7 @@ export default class Game extends Component {
                 visibleList = revealMines({mineList, visibleList});
                 incorrectList = getIncorrectList({boardSize, flaggedList, mineList});
             } else if (value === 0) {
-                visibleList = revealEmptyArea({boardSize, columnLength, tileIndex, columnLength, flaggedList, markedList, rowLength, valueList, visibleList});
+                visibleList = revealEmptyArea({boardSize, columnLength, tileIndex, flaggedList, markedList, rowLength, valueList, visibleList});
             }
         }
 

@@ -21,7 +21,7 @@ import {tileAltClickReducer} from './tileAltClickReducer/tileAltClickReducer';
  * @param {boolean} state.win
  * @param {object}  action
  */
-export const gameStateReducer = (state, action) => {
+const gameStateReducer = (state, action) => {
     const actionTypeMap = {
             GAME_INIT: gameInitReducer,
             GAME_START: gameStartReducer,
@@ -36,3 +36,5 @@ export const gameStateReducer = (state, action) => {
 
     return state;
 };
+
+export default gameStateReducer;
