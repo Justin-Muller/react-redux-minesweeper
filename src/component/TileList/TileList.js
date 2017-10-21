@@ -1,4 +1,5 @@
 import React from 'react';
+import './../TileList/TileList.css';
 import TileContainer from '../../container/TileContainer/TileContainer';
 
 const renderTile = (props, tileIndex) => {
@@ -6,9 +7,10 @@ const renderTile = (props, tileIndex) => {
 
     return (
         <TileContainer
-            id={tileIndex}
             flagged={flaggedList[tileIndex]}
+            id={tileIndex}
             incorrect={incorrectList[tileIndex]}
+            key={tileIndex}
             marked={markedList[tileIndex]}
             mine={mineList[tileIndex]}
             value={valueList[tileIndex]}
@@ -28,7 +30,7 @@ const renderRow = (props, rowIndex) => {
     return (<div className="row" key={rowIndex}>{tiles}</div>);
 };
 
-const TileList = (props) => {
+const renderRows = (props) => {
     const { rowLength } = props;
 
     let rows = [];
@@ -38,6 +40,17 @@ const TileList = (props) => {
     }
 
     return rows;
+};
+
+const TileList = (props) => {
+    const rows = renderRows(props);
+    const { columnLength, tileSize } = props;
+
+    const style = {
+        width: tileSize * columnLength + 'px'
+    };
+
+    return <div className="board" style={style}>{rows}</div>;
 };
 
 export default TileList;

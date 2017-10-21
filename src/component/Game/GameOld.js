@@ -1,4 +1,4 @@
-import './Game.css';
+import './../TileList/Game.css';
 import React, { Component } from 'react';
 import TileListContainer from '../../container/TileListContainer/TileListContainer';
 import GameOverConfirm from '../GameOverConfirm/GameOverConfirm';
