@@ -1,4 +1,3 @@
-//TODO - Do we need to convert revealEmptyArea to a reducer?
 
 /**
  * Reveals an empty tile and all adjacent empty tiles until it reaches the edge of values.

@@ -9,15 +9,17 @@ import React from 'react';
  * @param {Boolean}  props.win
  * @returns {DOMElement}
  */
-export default function GameOverConfirm(props) {
-    if (props.show) {
-        const messagePrefix = props.win ? 'You win!' : 'Game Over';
-        const message = `${messagePrefix}\n\nWould you like to play again?`
+const GameOverConfirm = (props) => {
+    const { onConfirm, show, win } = props;
+
+    if (show) {
+        const messagePrefix = win ? 'You win!' : 'Game Over';
+        const message = `${messagePrefix}\n\nWould you like to play again?`;
 
         //Slight delay to allow board to update before popping up confirm message.
         setTimeout(() => {
             if (window.confirm(message)) {
-                props.onConfirm();
+                onConfirm();
             }
         }, 100);
     }
@@ -25,4 +27,6 @@ export default function GameOverConfirm(props) {
     return (
         <div></div>
     );
-}
+};
+
+export default GameOverConfirm;

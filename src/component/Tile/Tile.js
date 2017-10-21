@@ -1,9 +1,9 @@
 import React from 'react';
 import './Tile.css';
 
-/* Tile helpers */
+const getTileAttributes = (props) => {
+    const {classNames, onMouseDown, onMouseUp, onRightClick, style} = props;
 
-function getTileAttributes({classNames, onMouseDown, onMouseUp, onRightClick, style}) {
     let attributes = {
         className: classNames.join(' '),
         type: 'button',
@@ -22,10 +22,11 @@ function getTileAttributes({classNames, onMouseDown, onMouseUp, onRightClick, st
     }
 
     return attributes;
-}
+};
 
-function getTileClassNames({disabled, flagged, incorrect, marked, mine, value, visible}) {
+const getTileClassNames = (props) => {
     const classNames = ['tile'];
+    const {disabled, flagged, incorrect, mine, visible} = props;
 
     if (disabled) {
         classNames.push('tile-disabled');
@@ -45,9 +46,11 @@ function getTileClassNames({disabled, flagged, incorrect, marked, mine, value, v
     }
 
     return classNames;
-}
+};
 
-function getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value, visible}) {
+const getTileDisplayValue = (props) => {
+    const {flagged, incorrect, marked, mine, value, visible} = props;
+
     if (incorrect) {
         return '\u2715';
     }
@@ -71,7 +74,16 @@ function getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value,
     }
 
     return '\u00A0';
-}
+};
+
+const getTileStyle = (props) => {
+    const { tileSize } = props;
+    return {
+        height: tileSize + 'px',
+        lineHeight: tileSize + 'px',
+        width: tileSize + 'px'
+    }
+};
 
 /**
  * The tile can contain either a mine, a number (value), a flag (flagged), a question mark (marked) or blank (value = 0). The tile will initially be invisible (visible = false) until the user has clicked on the tile to reveal a value or mine.
@@ -90,18 +102,15 @@ function getTileDisplayValue({disabled, flagged, incorrect, marked, mine, value,
  * @param {Boolean}  props.visible - Visible flag to show/hide the value or mine in the tile.
  * @returns {DOMElement}
  */
-export default function Tile(props) {
+const Tile = (props) => {
     const classNames = getTileClassNames(props);
     const displayValue = getTileDisplayValue(props);
-    const {tileSize} = props;
-    const style = {
-        height: tileSize + 'px',
-        lineHeight: tileSize + 'px',
-        width: tileSize + 'px'
-    };
+    const style = getTileStyle(props);
     const attributes = getTileAttributes({...props, classNames, style});
 
     return (
         <button {...attributes}>{displayValue}</button>
     );
-}
+};
+
+export default Tile;
