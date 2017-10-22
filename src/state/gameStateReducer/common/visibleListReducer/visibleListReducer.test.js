@@ -18,6 +18,7 @@ describe('visibleListReducer', () => {
             rowLength: 0,
             flaggedList: [],
             markedList: [],
+            mineList: [],
             valueList: []
         };
     });
@@ -38,6 +39,10 @@ describe('visibleListReducer', () => {
                 false, false,
                 false, false
             ];
+            state.mineList = [
+                false, false,
+                false, false
+            ]
         });
 
         describe('and all available positions are flagged', () => {
@@ -99,13 +104,40 @@ describe('visibleListReducer', () => {
                 state.valueList = [
                     1, 1,
                     1, 0
-                ]
+                ];
+                state.mineList = [
+                    false, false,
+                    false, true
+                ];
             });
 
             it('should reveal one tile.', () => {
                 const expected = [
                     true,  false,
                     false, false
+                ];
+                const {visibleList} = visibleListReducer(state, action);
+                expect(visibleList).toEqual(expected);
+            });
+        });
+
+        describe('and a mine is selected', () => {
+            beforeEach(() => {
+                state.valueList = [
+                    1, 2,
+                    2, 1
+                ];
+                state.mineList = [
+                    true, false,
+                    false, true
+                ];
+            });
+
+
+            it('should reveal all mines on the board.', () => {
+                const expected = [
+                    true, false,
+                    false, true
                 ];
                 const {visibleList} = visibleListReducer(state, action);
                 expect(visibleList).toEqual(expected);
