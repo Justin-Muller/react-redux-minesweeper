@@ -1,7 +1,9 @@
-import {gameInitReducer} from './gameInitReducer/gameInitReducer';
-import {gameStartReducer} from './gameStartReducer/gameStartReducer';
-import {tileClickReducer} from './tileClickReducer/tileClickReducer';
-import {tileAltClickReducer} from './tileAltClickReducer/tileAltClickReducer';
+import gameInitReducer from './gameInitReducer/gameInitReducer';
+import gameStartReducer from './gameStartReducer/gameStartReducer';
+import tileAltClickReducer from './tileAltClickReducer/tileAltClickReducer';
+import tileMouseDownStartReducer from './tileMouseDownStartReducer/tileMouseDownStartReducer';
+import tileMouseDownEndReducer from './tileMouseDownEndReducer/tileMouseDownEndReducer';
+import tileMouseUpReducer from './tileMouseUpReducer/tileMouseUpReducer';
 
 /**
  * Update these values manually to change the game's difficulty.
@@ -48,8 +50,10 @@ const gameStateReducer = (state, action) => {
     const actionTypeMap = {
             GAME_INIT: gameInitReducer,
             GAME_START: gameStartReducer,
-            TILE_CLICK: tileClickReducer,
-            TILE_ALT_CLICK: tileAltClickReducer
+            TILE_ALT_CLICK: tileAltClickReducer,
+            TILE_MOUSE_DOWN_START: tileMouseDownStartReducer,
+            TILE_MOUSE_DOWN_END: tileMouseDownEndReducer,
+            TILE_MOUSE_UP: tileMouseUpReducer
         },
         actionTypeReducer = actionTypeMap[action.type];
 

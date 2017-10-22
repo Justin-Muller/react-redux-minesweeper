@@ -3,37 +3,38 @@
  * Reveals an empty tile and all adjacent empty tiles until it reaches the edge of values.
  * Note: Mutating passed in array to save on performance. This function is recursive.
  * @function revealEmptyArea
- * @param {Number} props.boardSize
- * @param {Number} props.columnLength
- * @param {Number} props.tileIndex
- * @param {Array}  props.flaggedList
- * @param {Array}  props.markedList
- * @param {Array}  props.valueList
- * @param {Array}  props.visibleList
+ * @param {Number} state.boardSize
+ * @param {Number} state.columnLength
+ * @param {Array}  state.flaggedList
+ * @param {Array}  state.markedList
+ * @param {Array}  state.valueList
+ * @param {Array}  state.visibleList
+ * @param {Number} id
  * @returns {Array}
  */
-function revealEmptyArea(props) {
-    const {boardSize, columnLength, flaggedList, markedList, tileIndex, valueList} = props;
-    let {visibleList} = props;
-    visibleList[tileIndex] = true;
+const revealEmptyArea = (state, id) => {
+    const { columnLength, flaggedList, markedList, rowLength, valueList } = state;
+    const boardSize = columnLength * rowLength;
+    let { visibleList } = state;
+    visibleList[id] = true;
 
-    if (valueList[tileIndex]) {
+    if (valueList[id]) {
         return visibleList;
     }
 
-    const wallToTop = tileIndex < columnLength;
-    const wallToLeft = tileIndex % columnLength === 0;
-    const wallToRight = tileIndex % columnLength === (columnLength - 1);
-    const wallToBottom = tileIndex >= boardSize - columnLength;
+    const wallToTop = id < columnLength;
+    const wallToLeft = id % columnLength === 0;
+    const wallToRight = id % columnLength === (columnLength - 1);
+    const wallToBottom = id >= boardSize - columnLength;
 
-    const topLeftTile = tileIndex - columnLength - 1;
-    const topTile = tileIndex - columnLength;
-    const topRightTile = tileIndex - columnLength + 1;
-    const leftTile = tileIndex - 1;
-    const rightTile = tileIndex + 1;
-    const bottomLeftTile = tileIndex + columnLength - 1;
-    const bottomTile = tileIndex + columnLength;
-    const bottomRightTile = tileIndex + columnLength + 1;
+    const topLeftTile = id - columnLength - 1;
+    const topTile = id - columnLength;
+    const topRightTile = id - columnLength + 1;
+    const leftTile = id - 1;
+    const rightTile = id + 1;
+    const bottomLeftTile = id + columnLength - 1;
+    const bottomTile = id + columnLength;
+    const bottomRightTile = id + columnLength + 1;
 
     //TODO - think of a simpler way to calculate this state. Perhaps bit-wise operations?
 
@@ -41,51 +42,74 @@ function revealEmptyArea(props) {
     if (!wallToTop) {
         //top left
         if (!wallToLeft && !visibleList[topLeftTile] && !flaggedList[topLeftTile] && !markedList[topLeftTile]) {
-            visibleList = revealEmptyArea({...props, tileIndex: topLeftTile});
+            visibleList = revealEmptyArea(state, topLeftTile);
         }
 
         //top
         if (!visibleList[topTile] && !flaggedList[topTile] && !markedList[topTile]) {
-            visibleList = revealEmptyArea({...props, tileIndex: topTile});
+            visibleList = revealEmptyArea(state, topTile);
         }
 
 
         //top right
         if (!wallToRight && !visibleList[topRightTile] && !flaggedList[topRightTile] && !markedList[topRightTile]) {
-            visibleList = revealEmptyArea({...props, tileIndex: topRightTile});
+            visibleList = revealEmptyArea(state, topRightTile);
         }
     }
 
     //left
     if (!wallToLeft && !visibleList[leftTile] && !flaggedList[leftTile] && !markedList[leftTile]) {
-        visibleList = revealEmptyArea({...props, tileIndex: leftTile});
+        visibleList = revealEmptyArea(state, leftTile);
     }
 
     //right
     if (!wallToRight && !visibleList[rightTile] && !flaggedList[rightTile] && !markedList[rightTile]) {
-        visibleList = revealEmptyArea({...props, tileIndex: rightTile});
+        visibleList = revealEmptyArea(state, rightTile);
     }
 
     //bottom row
     if (!wallToBottom) {
         //bottom left
         if (!wallToLeft && !visibleList[bottomLeftTile] && !flaggedList[bottomLeftTile] && !markedList[bottomLeftTile]) {
-            visibleList = revealEmptyArea({...props, tileIndex: bottomLeftTile});
+            visibleList = revealEmptyArea(state, bottomLeftTile);
         }
 
         //bottom
         if (!visibleList[bottomTile] && !flaggedList[bottomTile] && !markedList[bottomTile]) {
-            visibleList = revealEmptyArea({...props, tileIndex: bottomTile});
+            visibleList = revealEmptyArea(state, bottomTile);
         }
 
         //bottom right
         if (!wallToRight && !visibleList[bottomRightTile] && !flaggedList[bottomRightTile] && !markedList[bottomRightTile]) {
-            visibleList = revealEmptyArea({...props, tileIndex: bottomRightTile});
+            visibleList = revealEmptyArea(state, bottomRightTile);
         }
     }
 
     return visibleList;
-}
+};
+
+
+/**
+ * Reveals all mines on the map.
+ * @function revealMines
+ * @param {object} state
+ * @param {Array}  state.mineList
+ * @param {Array}  state.visibleList
+ * @returns {Array}
+ */
+const revealMines = (state) => {
+    const { mineList, visibleList } = state;
+
+    for (let minePosition = 0; minePosition < mineList.length; minePosition++) {
+        let mine = mineList[minePosition];
+        if (mine) {
+            visibleList[minePosition] = true;
+        }
+    }
+
+    return visibleList;
+};
+
 
 /**
  * @reducer visibleListReducer
@@ -93,15 +117,22 @@ function revealEmptyArea(props) {
  * @param {object} action
  * @returns {object}
  */
-export const visibleListReducer = (state, action) => {
-    const {columnLength, rowLength} = state;
-    const {tileIndex} = action;
-    const boardSize = columnLength * rowLength;
+const visibleListReducer = (state, action) => {
+    const { mineList } = state;
+    const { id } = action;
+    const mine = mineList[id];
 
     let visibleList = state.visibleList.slice(0);
-    visibleList[tileIndex] = true;
+    visibleList[id] = true;
 
-    visibleList = revealEmptyArea({...state, boardSize, tileIndex, visibleList});
+    //check if was a mine - reveal mines.
+    if (mine) {
+        visibleList = revealMines({ ...state, visibleList });
+    } else {
+        visibleList = revealEmptyArea({ ...state, visibleList }, id);
+    }
 
-    return {...state, visibleList};
+    return { ...state, visibleList };
 };
+
+export default visibleListReducer;

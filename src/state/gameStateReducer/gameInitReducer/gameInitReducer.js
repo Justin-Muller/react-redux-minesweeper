@@ -5,7 +5,7 @@
  * @param {Number} state.rowLength - How many tiles along the Y axis the playing area is.
  * @returns {object}
  */
-export const gameInitReducer = (state) => {
+const gameInitReducer = (state) => {
     const { columnLength, rowLength } = state;
     const boardSize = columnLength * rowLength;
 
@@ -15,6 +15,7 @@ export const gameInitReducer = (state) => {
         gameOver: false,
         incorrectList: (new Array(boardSize)).fill(false),
         initialised: false,
+        mouseDownTargetId: -1,
         markedList: (new Array(boardSize)).fill(false),
         mineList: (new Array(boardSize)).fill(false),
         showGameOverMessage: false,
@@ -23,3 +24,5 @@ export const gameInitReducer = (state) => {
         win: false
     };
 };
+
+export default gameInitReducer;

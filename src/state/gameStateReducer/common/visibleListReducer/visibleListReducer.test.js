@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {visibleListReducer} from './visibleListReducer';
+import visibleListReducer from './visibleListReducer';
 
 describe('visibleListReducer', () => {
     let action,
@@ -9,7 +9,7 @@ describe('visibleListReducer', () => {
     beforeEach(() => {
         //default settings for action (makes sure the tests don't auto fail if they are not set).
         action = {
-            tileIndex: 0
+            id: 0
         };
 
         //default settings for state (makes sure the tests don't auto fail if they are not set).

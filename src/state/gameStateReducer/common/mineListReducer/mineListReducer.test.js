@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {mineListReducer} from './mineListReducer';
+import mineListReducer from './mineListReducer';
 
 describe('mineListReducer', () => {
     let action,
@@ -46,14 +46,14 @@ describe('mineListReducer', () => {
             state.rowLength = 1;
         });
 
-        describe('When action.tileIndex = 0', () => {
+        describe('When action.id = 0', () => {
             beforeEach(() => {
-                action.tileIndex = 0;
+                action.id = 0;
             });
 
             it('should return a mineList that does not have a mine in position 0.', () => {
                 const {mineList} = mineListReducer(state, action);
-                expect(mineList[action.tileIndex]).toBe(false);
+                expect(mineList[action.id]).toBe(false);
             });
 
             it('should return a mineList that has a mine in position 1.', () => {
@@ -70,14 +70,14 @@ describe('mineListReducer', () => {
             state.rowLength = 10;
         });
 
-        describe('When action.tileIndex = 5', () => {
+        describe('When action.id = 5', () => {
             beforeEach(() => {
-                action.tileIndex = 5;
+                action.id = 5;
             });
 
             it('should return a mineList that does not have a mine in position 5.', () => {
                 const {mineList} = mineListReducer(state, action);
-                expect(mineList[action.tileIndex]).toBe(false);
+                expect(mineList[action.id]).toBe(false);
             });
 
             it('should return a mineList that contains 5 mines.', () => {

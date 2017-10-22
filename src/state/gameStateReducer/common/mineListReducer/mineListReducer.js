@@ -2,13 +2,13 @@
  * @reducer mineListReducer - Initialises the mines that will be used on the board.
  * @param {object} state
  * @param {object} action
- * @param {number} action.tileIndex - variable which is used to be the first tile to be clicked on the board.
+ * @param {number} action.id - variable which is used to be the first tile to be clicked on the board.
  * @param {string} action.type
  * @returns {object}
  */
-export const mineListReducer = (state = {}, action= {}) => {
-    const {tileIndex} = action;
-    const {columnLength, mineLength, rowLength} = state;
+const mineListReducer = (state, action) => {
+    const { id } = action;
+    const { columnLength, mineLength, rowLength } = state;
     const boardSize = columnLength  * rowLength;
 
     if (mineLength > (boardSize - 1)) {
@@ -19,7 +19,7 @@ export const mineListReducer = (state = {}, action= {}) => {
     let possibleMines = [];
 
     for (let i = 0; i < boardSize; i++) {
-        if (i === tileIndex) {
+        if (i === id) {
             continue;
         }
         possibleMines.push(i);
@@ -31,5 +31,7 @@ export const mineListReducer = (state = {}, action= {}) => {
         mineList[mineIndex] = true;
     }
 
-    return {...state, mineList};
+    return { ...state, mineList };
 };
+
+export default mineListReducer;

@@ -2,7 +2,7 @@ import React from 'react';
 import './Tile.css';
 
 const getTileAttributes = (props) => {
-    const {classNames, onMouseDown, onMouseUp, onRightClick, style} = props;
+    const { classNames, disabled, id, onMouseDown, onMouseUp, onRightClick, style } = props;
 
     let attributes = {
         className: classNames.join(' '),
@@ -12,13 +12,13 @@ const getTileAttributes = (props) => {
 
     //check if a touch device like a smart phone or tablet
     if ('ontouchstart' in window) {
-        attributes.onTouchStart = (event) => onMouseDown(event);
-        attributes.onTouchEnd = (event) => onMouseUp(event);
+        attributes.onTouchStart = (event) => onMouseDown({ event, id, disabled });
+        attributes.onTouchEnd = (event) => onMouseUp({ event, id, disabled });
     } else {
         //Otherwise use mouse events instead
-        attributes.onContextMenu = onRightClick;
-        attributes.onMouseDown = (event) => onMouseDown(event);
-        attributes.onMouseUp = (event) => onMouseUp(event);
+        attributes.onContextMenu = () => onRightClick({ id, disabled });
+        attributes.onMouseDown = (event) => onMouseDown({ event, id, disabled });
+        attributes.onMouseUp = (event) => onMouseUp({ event, id, disabled });
     }
 
     return attributes;
@@ -26,7 +26,7 @@ const getTileAttributes = (props) => {
 
 const getTileClassNames = (props) => {
     const classNames = ['tile'];
-    const {disabled, flagged, incorrect, mine, visible} = props;
+    const { disabled, flagged, incorrect, mine, visible } = props;
 
     if (disabled) {
         classNames.push('tile-disabled');
@@ -49,7 +49,7 @@ const getTileClassNames = (props) => {
 };
 
 const getTileDisplayValue = (props) => {
-    const {flagged, incorrect, marked, mine, value, visible} = props;
+    const { flagged, incorrect, marked, mine, value, visible } = props;
 
     if (incorrect) {
         return '\u2715';

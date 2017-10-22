@@ -104,7 +104,7 @@ function getStartState({columnLength, flaggedList, markedList, mineLength, rowLe
     const boardSize = columnLength * rowLength;
     const mineList = getMineList({boardSize, startTile, mineLength});
     const valueList = getValueList({boardSize, columnLength, mineList});
-    const newVisibleList = getVisibleList({boardSize, tileIndex: startTile, columnLength, flaggedList, markedList, valueList, visibleList});
+    const newVisibleList = getVisibleList({boardSize, id: startTile, columnLength, flaggedList, markedList, valueList, visibleList});
 
     return {
         initialised: true,
@@ -130,7 +130,7 @@ function getVisibleList({boardSize, tileIndex, columnLength, flaggedList, marked
     let newVisibleList = visibleList.slice(0);
     newVisibleList[tileIndex] = true;
 
-    newVisibleList = revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, markedList, valueList, visibleList: newVisibleList});
+    newVisibleList = revealEmptyArea({boardSize, id, columnLength, flaggedList, markedList, valueList, visibleList: newVisibleList});
 
     return newVisibleList;
 }
@@ -299,46 +299,46 @@ function revealEmptyArea({boardSize, tileIndex, columnLength, flaggedList, marke
     if (!wallToTop) {
         //top left
         if (!wallToLeft && !visibleList[topLeftTile] && !flaggedList[topLeftTile] && !markedList[topLeftTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topLeftTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({boardSize, columnLength, id: topLeftTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //top
         if (!visibleList[topTile] && !flaggedList[topTile] && !markedList[topTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({boardSize, columnLength, id: topTile, flaggedList, markedList, valueList, visibleList});
         }
 
 
         //top right
         if (!wallToRight && !visibleList[topRightTile] && !flaggedList[topRightTile] && !markedList[topRightTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: topRightTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({boardSize, columnLength, id: topRightTile, flaggedList, markedList, valueList, visibleList});
         }
     }
 
     //left
     if (!wallToLeft && !visibleList[leftTile] && !flaggedList[leftTile] && !markedList[leftTile]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: leftTile, flaggedList, markedList, valueList, visibleList});
+        visibleList = revealEmptyArea({boardSize, columnLength, id: leftTile, flaggedList, markedList, valueList, visibleList});
     }
 
     //right
     if (!wallToRight && !visibleList[rightTile] && !flaggedList[rightTile] && !markedList[rightTile]) {
-        visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: rightTile, flaggedList, markedList, valueList, visibleList});
+        visibleList = revealEmptyArea({boardSize, columnLength, id: rightTile, flaggedList, markedList, valueList, visibleList});
     }
 
     //bottom row
     if (!wallToBottom) {
         //bottom left
         if (!wallToLeft && !visibleList[bottomLeftTile] && !flaggedList[bottomLeftTile] && !markedList[bottomLeftTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomLeftTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({boardSize, columnLength, id: bottomLeftTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //bottom
         if (!visibleList[bottomTile] && !flaggedList[bottomTile] && !markedList[bottomTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({boardSize, columnLength, id: bottomTile, flaggedList, markedList, valueList, visibleList});
         }
 
         //bottom right
         if (!wallToRight && !visibleList[bottomRightTile] && !flaggedList[bottomRightTile] && !markedList[bottomRightTile]) {
-            visibleList = revealEmptyArea({boardSize, columnLength, tileIndex: bottomRightTile, flaggedList, markedList, valueList, visibleList});
+            visibleList = revealEmptyArea({boardSize, columnLength, id: bottomRightTile, flaggedList, markedList, valueList, visibleList});
         }
     }
 
@@ -566,7 +566,7 @@ export default class Game extends Component {
                 visibleList = revealMines({mineList, visibleList});
                 incorrectList = getIncorrectList({boardSize, flaggedList, mineList});
             } else if (value === 0) {
-                visibleList = revealEmptyArea({boardSize, columnLength, tileIndex, flaggedList, markedList, rowLength, valueList, visibleList});
+                visibleList = revealEmptyArea({boardSize, columnLength, id, flaggedList, markedList, rowLength, valueList, visibleList});
             }
         }
 

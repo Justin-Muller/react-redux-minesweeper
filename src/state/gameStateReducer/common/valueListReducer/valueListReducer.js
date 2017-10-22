@@ -68,7 +68,7 @@ function incrementValuesAroundMine({boardSize, columnLength, minePosition, value
  * @param {object} action
  * @returns {object}
  */
-export const valueListReducer = (state, action) => {
+const valueListReducer = (state, action) => {
     const { columnLength, mineList, rowLength } = state;
     const boardSize = columnLength  * rowLength;
     let valueList = (new Array(boardSize)).fill(0);
@@ -83,3 +83,5 @@ export const valueListReducer = (state, action) => {
 
     return {...state, valueList};
 };
+
+export default valueListReducer;

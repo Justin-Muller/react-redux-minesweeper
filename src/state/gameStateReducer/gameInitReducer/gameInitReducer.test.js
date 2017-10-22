@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {gameInitReducer} from './gameInitReducer';
+import gameInitReducer from './gameInitReducer';
 
 describe('gameInitReducer', () => {
     let action,

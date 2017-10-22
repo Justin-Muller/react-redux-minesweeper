@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {valueListReducer} from './valueListReducer';
+import valueListReducer from './valueListReducer';
 
 describe('valueListReducer', () => {
     let action,

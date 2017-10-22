@@ -2,19 +2,19 @@ import React from 'react';
 import './../TileList/TileList.css';
 import TileContainer from '../../container/TileContainer/TileContainer';
 
-const renderTile = (props, tileIndex) => {
+const renderTile = (props, id) => {
     const { flaggedList, incorrectList, markedList, mineList, valueList, visibleList } = props;
 
     return (
         <TileContainer
-            flagged={flaggedList[tileIndex]}
-            id={tileIndex}
-            incorrect={incorrectList[tileIndex]}
-            key={tileIndex}
-            marked={markedList[tileIndex]}
-            mine={mineList[tileIndex]}
-            value={valueList[tileIndex]}
-            visible={visibleList[tileIndex]}
+            flagged={flaggedList[id]}
+            id={id}
+            incorrect={incorrectList[id]}
+            key={id}
+            marked={markedList[id]}
+            mine={mineList[id]}
+            value={valueList[id]}
+            visible={visibleList[id]}
         />);
 };
 
@@ -23,8 +23,8 @@ const renderRow = (props, rowIndex) => {
     let tiles = [];
 
     for (let columnIndex = 0; columnIndex < columnLength; columnIndex++) {
-        let tileIndex = columnIndex + (rowIndex * columnLength);
-        tiles.push(renderTile(props, tileIndex));
+        let id = columnIndex + (rowIndex * columnLength);
+        tiles.push(renderTile(props, id));
     }
 
     return (<div className="row" key={rowIndex}>{tiles}</div>);
