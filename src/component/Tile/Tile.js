@@ -2,7 +2,7 @@ import React from 'react';
 import './Tile.css';
 
 const getTileAttributes = (props) => {
-    const { classNames, disabled, id, onMouseDown, onMouseUp, onRightClick, style } = props;
+    const { classNames, id, onMouseDown, onMouseUp, onRightClick, style } = props;
 
     let attributes = {
         className: classNames.join(' '),
@@ -12,13 +12,13 @@ const getTileAttributes = (props) => {
 
     //check if a touch device like a smart phone or tablet
     if ('ontouchstart' in window) {
-        attributes.onTouchStart = (event) => onMouseDown({ event, id, disabled });
-        attributes.onTouchEnd = (event) => onMouseUp({ event, id, disabled });
+        attributes.onTouchStart = (event) => onMouseDown({ event, id });
+        attributes.onTouchEnd = (event) => onMouseUp({ event, id });
     } else {
         //Otherwise use mouse events instead
-        attributes.onContextMenu = () => onRightClick({ id, disabled });
-        attributes.onMouseDown = (event) => onMouseDown({ event, id, disabled });
-        attributes.onMouseUp = (event) => onMouseUp({ event, id, disabled });
+        attributes.onContextMenu = () => onRightClick({ id });
+        attributes.onMouseDown = (event) => onMouseDown({ event, id });
+        attributes.onMouseUp = (event) => onMouseUp({ event, id });
     }
 
     return attributes;

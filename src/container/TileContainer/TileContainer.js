@@ -11,15 +11,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onMouseDown: ({ disabled, event, id }) => {
+        onMouseDown: ({ event, id }) => {
 
             //TODO: test windows
             //ignore right click
             if (event.nativeEvent && event.nativeEvent.which > 1) {
-                return;
-            }
-
-            if (disabled) {
                 return;
             }
 
@@ -38,7 +34,7 @@ const mapDispatchToProps = (dispatch) => {
             });
         },
 
-        onMouseUp: ({ disabled, event, id }) => {
+        onMouseUp: ({ event, id }) => {
             dispatch({
                 type: 'TILE_MOUSE_UP',
                 event,
@@ -46,7 +42,7 @@ const mapDispatchToProps = (dispatch) => {
             });
         },
 
-        onRightClick: ({ disabled, id }) => {
+        onRightClick: ({ id }) => {
             dispatch({
                 type: 'TILE_ALT_CLICK',
                 id

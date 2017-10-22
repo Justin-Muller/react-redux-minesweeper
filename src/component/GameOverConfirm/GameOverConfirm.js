@@ -10,7 +10,7 @@ import React from 'react';
  * @returns {DOMElement}
  */
 const GameOverConfirm = (props) => {
-    const { onConfirm, show, win } = props;
+    const { onCancel, onConfirm, show, win } = props;
 
     if (show) {
         const messagePrefix = win ? 'You win!' : 'Game Over';
@@ -20,6 +20,8 @@ const GameOverConfirm = (props) => {
         setTimeout(() => {
             if (window.confirm(message)) {
                 onConfirm();
+            } else {
+                onCancel();
             }
         }, 100);
     }

@@ -81,12 +81,19 @@ const toggleFlagMarked = (state, action) => {
  * @returns {object}
  */
 const tileClickReducer = (state, action) => {
-    const { flaggedList, initialised, markedList, mineLength, mineList } = state;
+    const { flaggedList, gameOver, initialised, markedList, mineLength, mineList } = state;
     const { id } = action;
     const visible = state.visibleList[id];
 
     if (!initialised) {
         return gameStartReducer(state, action);
+    }
+
+    if (gameOver) {
+        return {
+            ...state,
+            showGameOverMessage: true
+        }
     }
 
     if (visible) {

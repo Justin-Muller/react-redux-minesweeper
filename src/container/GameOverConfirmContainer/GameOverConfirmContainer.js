@@ -16,6 +16,12 @@ const mapDispatchToProps = (dispatch) => {
             dispatch({
                 type: 'GAME_INIT'
             });
+        },
+
+        onCancel: () => {
+            dispatch({
+                type: 'GAME_FINISHED'
+            });
         }
     }
 };

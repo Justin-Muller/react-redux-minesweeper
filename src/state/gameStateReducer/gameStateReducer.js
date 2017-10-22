@@ -1,3 +1,4 @@
+import gameFinishedReducer from './gameFinishedReducer/gameFinishedReducer';
 import gameInitReducer from './gameInitReducer/gameInitReducer';
 import gameStartReducer from './gameStartReducer/gameStartReducer';
 import tileAltClickReducer from './tileAltClickReducer/tileAltClickReducer';
@@ -48,6 +49,7 @@ const gameStateReducer = (state, action) => {
     }
 
     const actionTypeMap = {
+            GAME_FINISHED: gameFinishedReducer,
             GAME_INIT: gameInitReducer,
             GAME_START: gameStartReducer,
             TILE_ALT_CLICK: tileAltClickReducer,
